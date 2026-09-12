@@ -1,0 +1,37 @@
+# Java build output (regenerate with: mvn package)
+/target/
+
+# Extracted / decompiled artifacts (regenerate from the source archive/apk)
+/apk_extracted/
+/htdocs_extracted/
+
+# Third-party downloaded tools (redownload when needed)
+/tools/
+
+# Compiled Unity client builds / exported project (regenerate from Unity)
+/HTTH_LocalClient/
+/HTTH_WindowsBuild/
+/HTTH_UnityProject/
+
+# Large binary archives / patched game client builds
+*.rar
+*.zip
+*.apk
+*.apk.idsig
+
+# Database dumps (may contain live player data - keep out of VCS)
+/ffef.sql
+/htth (2).sql
+
+# Large media assets (icon pack)
+/data/icon/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+
+# Crash dumps / debug logs
+hs_err_pid*.log
+hs_err_pid*.mdmp
+replay_pid*.log
+unity_build*.log
