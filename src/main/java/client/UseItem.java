@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import core.Manager;
-import core.MenuController;
+import core.MenuDisplay;
 import core.Service;
 import core.Util;
 import io.Message;
@@ -1179,7 +1179,7 @@ public class UseItem {
                                     = ItemFashion.get_item(listId[i]).ID + " " + ItemFashion.get_item(listId[i]).name;
                         }
                         p.data_yesno = new int[]{977};
-                        MenuController.send_dynamic_menu(p, 977, "Thời trang tự chọn", listSelect, null);
+                        MenuDisplay.send_dynamic_menu(p, 977, "Thời trang tự chọn", listSelect, null);
                         return false;
                     }
                     case 1002: {
@@ -1190,7 +1190,7 @@ public class UseItem {
                                     = ItemFashion.get_item(listId[i]).ID + " " + ItemFashion.get_item(listId[i]).name;
                         }
                         p.data_yesno = new int[]{976};
-                        MenuController.send_dynamic_menu(p, 976, "Thời trang tự chọn", listSelect, null);
+                        MenuDisplay.send_dynamic_menu(p, 976, "Thời trang tự chọn", listSelect, null);
                         return false;
                     }
                     default: {

@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import client.Player;
-import core.Manager;
+import core.Config;
 
 public class SessionManager {
     public static final List<Session> CLIENT_ENTRYS = new LinkedList<>();
     public static HashMap<String, Long> time_login = new HashMap<>();
     public static HashMap<String, Long> CLIENT_LOGIN_TIME = new HashMap<>();
-    public final static long TIME_LOGIN_AGAIN = Manager.gI().server_admin ? 0 : 5_000L;
+    public final static long TIME_LOGIN_AGAIN = Config.gI().server_admin ? 0 : 5_000L;
 
     public synchronized static void client_connect(Session ss) {
         ss.init();

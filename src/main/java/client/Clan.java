@@ -1626,7 +1626,7 @@ public class Clan {
     }
 
     public synchronized void update_xp(int num) {
-        // if (Manager.gI().exp > 0) {
+        // if (Config.gI().exp > 0) {
         this.xp += num;
         // }
     }

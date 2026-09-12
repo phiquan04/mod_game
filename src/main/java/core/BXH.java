@@ -222,9 +222,13 @@ public class BXH {
                 temp.id = rs.getInt("id");
                 temp.name = rs.getString("name");
                 temp.thongthao = rs.getInt("wanted_point");
+                String fashionJson = rs.getString("fashion");
+                if (fashionJson == null) {
+                    continue;
+                }
                 List<ItemFashionP2> fashion = new ArrayList<>();
                 List<ItemFashionP> itfashionP = new ArrayList<>();
-                JSONArray js0 = (JSONArray) JSONValue.parse(rs.getString("fashion"));
+                JSONArray js0 = (JSONArray) JSONValue.parse(fashionJson);
                 JSONArray js_temp_2 = (JSONArray) JSONValue.parse(js0.get(0).toString());
                 for (int i0 = 0; i0 < js_temp_2.size(); i0++) {
                     JSONArray js_temp = (JSONArray) JSONValue.parse(js_temp_2.get(i0).toString());
@@ -353,9 +357,13 @@ public class BXH {
                 temp.id = rs.getInt("id");
                 temp.name = rs.getString("name");
                 temp.thongthao = rs.getInt("pvppoint");
+                String fashionJson = rs.getString("fashion");
+                if (fashionJson == null) {
+                    continue;
+                }
                 List<ItemFashionP2> fashion = new ArrayList<>();
                 List<ItemFashionP> itfashionP = new ArrayList<>();
-                JSONArray js0 = (JSONArray) JSONValue.parse(rs.getString("fashion"));
+                JSONArray js0 = (JSONArray) JSONValue.parse(fashionJson);
                 JSONArray js_temp_2 = (JSONArray) JSONValue.parse(js0.get(0).toString());
                 for (int i0 = 0; i0 < js_temp_2.size(); i0++) {
                     JSONArray js_temp = (JSONArray) JSONValue.parse(js_temp_2.get(i0).toString());
@@ -472,14 +480,19 @@ public class BXH {
                 InfoMemList temp = new InfoMemList();
                 temp.id = rs.getInt("id");
                 temp.name = rs.getString("name");
-                JSONArray js0 = (JSONArray) JSONValue.parse(rs.getString("level"));
+                String levelJson = rs.getString("level");
+                String fashionJson = rs.getString("fashion");
+                if (levelJson == null || fashionJson == null) {
+                    continue;
+                }
+                JSONArray js0 = (JSONArray) JSONValue.parse(levelJson);
                 temp.level = Short.parseShort(js0.get(0).toString());
                 long exp = Long.parseLong(js0.get(1).toString());
                 temp.thongthao = Short.parseShort(js0.get(2).toString());
                 List<ItemFashionP2> fashion = new ArrayList<>();
                 List<ItemFashionP> itfashionP = new ArrayList<>();
                 js0.clear();
-                js0 = (JSONArray) JSONValue.parse(rs.getString("fashion"));
+                js0 = (JSONArray) JSONValue.parse(fashionJson);
                 JSONArray js_temp_2 = (JSONArray) JSONValue.parse(js0.get(0).toString());
                 for (int i0 = 0; i0 < js_temp_2.size(); i0++) {
                     JSONArray js_temp = (JSONArray) JSONValue.parse(js_temp_2.get(i0).toString());

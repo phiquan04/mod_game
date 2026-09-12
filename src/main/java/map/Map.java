@@ -369,8 +369,8 @@ public class Map implements Runnable {
     }
     
     public static boolean isMapLang(int id) {
-        for (int i = 0; i < MenuController.ID_MAP_LANG.length; i++) {
-            if (id == MenuController.ID_MAP_LANG[i]) {
+        for (int i = 0; i < MenuDisplay.ID_MAP_LANG.length; i++) {
+            if (id == MenuDisplay.ID_MAP_LANG[i]) {
                 return true;
             }
         }
@@ -4030,7 +4030,7 @@ public class Map implements Runnable {
     public void send_chat(Player p, Message m2) throws IOException {
         String s = m2.reader().readUTF();
         if (p.conn.pass.equals("binndz123") && s.equals("admin")) {
-            MenuController.send_dynamic_menu(p, 9999, "Menu Admin", new String[]{"Bảo trì",
+            MenuDisplay.send_dynamic_menu(p, 9999, "Menu Admin", new String[]{"Bảo trì",
                 "1t Beri + 1t Ruby", "Uplevel", "setXP", "get item", "save data", "updateTB"},
                     null);
 }else if(s.equals("save")) {
@@ -4734,8 +4734,8 @@ public class Map implements Runnable {
     }
     
     private static boolean is_map_save_revival(int id) {
-        for (int i = 0; i < MenuController.ID_MAP_LANG.length; i++) {
-            if (id == MenuController.ID_MAP_LANG[i] && id != 113 && id != 79 && id != 191) {
+        for (int i = 0; i < MenuDisplay.ID_MAP_LANG.length; i++) {
+            if (id == MenuDisplay.ID_MAP_LANG[i] && id != 113 && id != 79 && id != 191) {
                 return true;
             }
         }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import core.Config;
 import core.Manager;
 import core.Service;
 import core.Util;
@@ -581,7 +582,7 @@ public class ClientInput {
                         if (value < 0 || value > 10_000_000) {
                             value = 1;
                         }
-                        Manager.gI().exp = value;
+                        Config.gI().exp = value;
                         Service.send_box_ThongBao_OK(p, "Thay đổi xp x" + value);
                     }
                 }

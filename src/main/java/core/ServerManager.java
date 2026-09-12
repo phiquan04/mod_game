@@ -38,14 +38,14 @@ public class ServerManager implements Runnable {
 
     public void run() {
         try {
-            this.server = new ServerSocket(Manager.gI().server_port);
+            this.server = new ServerSocket(Config.gI().server_port);
         } catch (IOException e) {
             System.out.println(e);
             System.exit(0);
         }
         System.out.println("Started in " + (System.currentTimeMillis() - this.time) + "ms");
         System.out.println();
-        System.out.println("LISTEN PORT " + Manager.gI().server_port + "...");
+        System.out.println("LISTEN PORT " + Config.gI().server_port + "...");
         while (this.running) {
             try {
                 Socket client = this.server.accept();

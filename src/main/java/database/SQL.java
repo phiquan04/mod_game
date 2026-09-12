@@ -3,7 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.SQLException;
 import com.zaxxer.hikari.HikariDataSource;
-import core.Manager;
+import core.Config;
 
 public class SQL {
 	private static SQL instance = null;
@@ -13,11 +13,11 @@ public class SQL {
 	private final String pass;
 
 	public SQL() {
-		url = "jdbc:mysql://" + Manager.gI().mysql_host + ":3306/" + Manager.gI().mysql_database
+		url = "jdbc:mysql://" + Config.gI().mysql_host + ":3306/" + Config.gI().mysql_database
 				+ "?autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8";
 		// System.out.println(url);
-		user = Manager.gI().mysql_user;
-		pass = Manager.gI().mysql_pass;
+		user = Config.gI().mysql_user;
+		pass = Config.gI().mysql_pass;
 		HikariDataSource config = new HikariDataSource();
 		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		config.setJdbcUrl(url);

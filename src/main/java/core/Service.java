@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import activities.Rebuild_Item;
 import client.*;
+import io.Cmd;
 import io.Message;
 import io.Session;
 import map.Boss;
@@ -397,16 +398,16 @@ public class Service {
                 byte zoomLv = (conn.zoomlv == 0) ? 1 : conn.zoomlv;
                 path = "data/icon/x" + zoomLv + "/" + id_request + ".png";
                 byte[] dataImg = Util.loadfile(path);
-                Message m2 = new Message(-101);
+                Message m2 = new Message(Cmd.SEND_ICON_LARGE);
                 if (dataImg.length < 32_000) {
-                    m2 = new Message(-51);
+                    m2 = new Message(Cmd.SEND_ICON);
                 }
                 m2.writer().writeShort(id);
                 m2.writer().write(dataImg);
                 conn.addmsg(m2);
                 m2.cleanup();
             } catch (IOException e) {
-                if (Manager.gI().server_admin) {
+                if (Config.gI().server_admin) {
                     System.out.println("icon id not found " + path);
                     // Manager.gI().add_icon_fail(path);
                 }

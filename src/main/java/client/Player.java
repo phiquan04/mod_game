@@ -14,6 +14,7 @@ import activities.*;
 import org.joda.time.DateTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
+import core.Config;
 import core.Manager;
 import core.Service;
 import core.Util;
@@ -1189,7 +1190,7 @@ public class Player {
             return;
         }
         if (multi) {
-            exp_up *= Manager.gI().exp;
+            exp_up *= Config.gI().exp;
         }
         this.exp += exp_up;
         //
@@ -1681,7 +1682,7 @@ public class Player {
     }
 
     public void update_skill_exp(int index, long exp) throws IOException {
-        exp *= Manager.gI().exp;
+        exp *= Config.gI().exp;
         if (index < 4 || index == 5000) {
             Skill_info sk_info = null;
             for (int i = 0; i < this.skill_point.size(); i++) {

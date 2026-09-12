@@ -24,7 +24,7 @@ import client.Clan;
 import client.Item;
 import client.MessageHandler;
 import client.Player;
-import core.Manager;
+import core.Config;
 import core.Service;
 import database.SQL;
 import map.Map;
@@ -112,7 +112,7 @@ public class Session implements Runnable {
             while (this.connected) {
                 Message m = read_msg();
                 if (m != null) {
-                    if (m.cmd == -27) {
+                    if (m.cmd == Cmd.HANDSHAKE) {
                         sendkeys();
                     } else if (sendKeyComplete) {
                         try {
@@ -145,7 +145,8 @@ public class Session implements Runnable {
         if (data != null) {
             int size = data.length;
             if (sendKeyComplete) {
-                if ((msg.cmd == -39) || msg.cmd == -101 || msg.cmd == -93 || msg.cmd == 76) {
+                if ((msg.cmd == Cmd.DATA_PUSH_39) || msg.cmd == Cmd.SEND_ICON_LARGE
+                        || msg.cmd == Cmd.DATA_PUSH_93 || msg.cmd == Cmd.DATA_PUSH_76) {
                     dos.writeByte(writeKey((byte) (size >> 24)));
                     dos.writeByte(writeKey((byte) (size >> 16)));
                     dos.writeByte(writeKey((byte) (size >> 8)));
@@ -156,7 +157,7 @@ public class Session implements Runnable {
                     int byte2 = writeKey((byte) (size));
                     dos.writeByte(byte2);
                 }
-            } else if (msg.cmd == -39) {
+            } else if (msg.cmd == Cmd.DATA_PUSH_39) {
                 dos.writeInt(size);
             } else {
                 final int byte1 = (byte) (size & 0xFF00);
@@ -228,7 +229,7 @@ public class Session implements Runnable {
     }
 
     public void sendkeys() throws IOException {
-        Message msg = new Message(-27);
+        Message msg = new Message(Cmd.HANDSHAKE);
         msg.writer().writeByte(KEYS.length);
         msg.writer().writeByte(KEYS[0]);
         for (int i = 1; i < KEYS.length; i++) {
@@ -245,7 +246,7 @@ public class Session implements Runnable {
         if (type == 3 && p != null && p.conn != null) {
             p.send_skill();
         } else {
-            Message m2 = new Message(-7);
+            Message m2 = new Message(Cmd.REQUEST_DATA_UPDATE);
             switch (type) {
                 case 2: {
                     m2.writer().writeByte(2);
@@ -552,7 +553,7 @@ public class Session implements Runnable {
                 login_notice("Ký tự không hợp lệ");
                 return;
             }
-            if (Manager.gI().server_admin) {
+            if (Config.gI().server_admin) {
                 SessionManager.time_login.clear();
             }
             if (SessionManager.time_login.containsKey(user_) && !user_.equals("admin")) {
@@ -594,7 +595,11 @@ public class Session implements Runnable {
                     return;
                 }
                 //
-                JSONArray js = (JSONArray) JSONValue.parse(rs.getString("char"));
+                String charJson = rs.getString("char");
+                if (charJson == null) {
+                    charJson = "[]";
+                }
+                JSONArray js = (JSONArray) JSONValue.parse(charJson);
                 for (int i = 0; i < js.size(); i++) {
                     list_char.add(js.get(i).toString());
                 }
@@ -664,7 +669,11 @@ public class Session implements Runnable {
                         return;
                     }
                     //
-                    JSONArray js = (JSONArray) JSONValue.parse(rs.getString("char"));
+                    String charJson = rs.getString("char");
+                    if (charJson == null) {
+                        charJson = "[]";
+                    }
+                    JSONArray js = (JSONArray) JSONValue.parse(charJson);
                     for (int i = 0; i < js.size(); i++) {
                         list_char.add(js.get(i).toString());
                     }
@@ -730,7 +739,7 @@ public class Session implements Runnable {
         Service.send_msg_data(this, 72, "data/msg/login/x2msg_72_638026480840808702", false);
         //
         if (this.zoomlv < 2) {
-            Message m22 = new Message(-7);
+            Message m22 = new Message(Cmd.REQUEST_DATA_UPDATE);
             m22.writer().writeByte(15);
             m22.writer().writeShort(MobTemplate.ENTRYS.size());
             for (int i = 0; i < MobTemplate.ENTRYS.size(); i++) {
@@ -764,13 +773,13 @@ public class Session implements Runnable {
             m22.cleanup();
         }
         if (this.user.startsWith("htth_vietvan_")) {
-            Message m2 = new Message(-57);
+            Message m2 = new Message(Cmd.SPECIAL_ACCOUNT_ECHO);
             m2.writer().writeUTF(user_);
             addmsg(m2);
             m2.cleanup();
         }
         send_list_char();
-        Message m2 = new Message(-2);
+        Message m2 = new Message(Cmd.LOGIN_LEGACY);
         addmsg(m2);
         m2.cleanup();
         //
@@ -780,7 +789,7 @@ public class Session implements Runnable {
     }
 
     private void login_after_time(long l) throws IOException {
-        Message m = new Message(-69);
+        Message m = new Message(Cmd.LOGIN_RETRY_LATER);
         m.writer().writeUTF("Mời bạn đăng nhập lại sau thời gian");
         m.writer().writeShort((int) l);
         addmsg(m);
@@ -788,7 +797,7 @@ public class Session implements Runnable {
     }
 
     private void send_list_char() throws IOException {
-        Message m2 = new Message(-4);
+        Message m2 = new Message(Cmd.SEND_CHAR_LIST);
         m2.writer().writeByte(list_char.size());
         for (int i = 0; i < list_char.size(); i++) {
             String name = list_char.get(i);
@@ -802,9 +811,13 @@ public class Session implements Runnable {
                                 + name + "' LIMIT 1;");
                 rs = ps.executeQuery();
                 while (rs.next()) {
+                    String fashionJson = rs.getString("fashion");
+                    if (fashionJson == null) {
+                        fashionJson = "[[],[],[]]";
+                    }
                     List<ItemFashionP2> fashion = new ArrayList<>();
                     List<ItemFashionP> itfashionP = new ArrayList<>();
-                    JSONArray js0 = (JSONArray) JSONValue.parse(rs.getString("fashion"));
+                    JSONArray js0 = (JSONArray) JSONValue.parse(fashionJson);
                     JSONArray js_temp_2 = (JSONArray) JSONValue.parse(js0.get(0).toString());
                     for (int i0 = 0; i0 < js_temp_2.size(); i0++) {
                         JSONArray js_temp =
@@ -859,9 +872,17 @@ public class Session implements Runnable {
                     m2.writer().writeShort(i);
                     m2.writer().writeUTF(name);
                     m2.writer().writeByte(rs.getByte("clazz"));
-                    JSONArray js_level = (JSONArray) JSONValue.parse(rs.getString("level"));
+                    String levelJson = rs.getString("level");
+                    if (levelJson == null) {
+                        levelJson = "[1,0,0]";
+                    }
+                    JSONArray js_level = (JSONArray) JSONValue.parse(levelJson);
                     m2.writer().writeShort(Short.parseShort(js_level.get(0).toString()));
-                    JSONArray js = (JSONArray) JSONValue.parse(rs.getString("body"));
+                    String bodyJson = rs.getString("body");
+                    if (bodyJson == null) {
+                        bodyJson = "[0,0]";
+                    }
+                    JSONArray js = (JSONArray) JSONValue.parse(bodyJson);
                     m2.writer().writeShort(
                             (head_ != -1) ? head_ : Short.parseShort(js.get(0).toString()));
                     m2.writer().writeShort(
@@ -923,7 +944,7 @@ public class Session implements Runnable {
     }
 
     private void login_notice(String s) throws IOException {
-        Message m = new Message(-11);
+        Message m = new Message(Cmd.CLIENT_YES_NO);
         m.writer().writeShort(0);
         m.writer().writeByte(0);
         m.writer().writeUTF("Thông báo");
@@ -937,7 +958,7 @@ public class Session implements Runnable {
         short index = m2.reader().readShort();
         Part part = Part.get_part(index);
         if (part != null) {
-            Message m = new Message(-82);
+            Message m = new Message(Cmd.READ_PART_NEW);
             m.writer().writeShort(index);
             m.writer().writeByte(part.type);
             for (int i = 0; i < part.pi.length; i++) {
@@ -1080,7 +1101,7 @@ public class Session implements Runnable {
     }
 
     public void update_onl(int type) {
-        if (Manager.gI().server_admin) {
+        if (Config.gI().server_admin) {
             type = 0;
         }
         Connection connection = null;
@@ -1168,7 +1189,7 @@ public class Session implements Runnable {
     }
 
     public void Check_Data_Ver() throws IOException {
-        Message m = new Message(-6);
+        Message m = new Message(Cmd.CHECK_DATA_VER);
         m.writer().writeShort(DataTemplate.VerdataMon);
         m.writer().writeShort(DataTemplate.VerdataPotion);
         m.writer().writeShort(DataTemplate.VerdataAttri);
@@ -1183,7 +1204,7 @@ public class Session implements Runnable {
         addmsg(m);
         m.cleanup();
         // send item7
-        m = new Message(-7);
+        m = new Message(Cmd.REQUEST_DATA_UPDATE);
         m.writer().writeByte(11);
         m.writer().writeByte(ItemTemplate7.ENTRYS.size());
         for (int i = 0; i < ItemTemplate7.ENTRYS.size(); i++) {

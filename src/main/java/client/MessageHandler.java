@@ -5,6 +5,7 @@ import activities.*;
 import static activities.DanhHieu.get_Id;
 import core.*;
 import event.EventSpecial;
+import io.Cmd;
 import io.Message;
 import io.Session;
 import map.Map;
@@ -22,69 +23,69 @@ public class MessageHandler {
 
     public void process_msg(Message m) throws IOException {
         switch (m.cmd) {
-            case -102:{
+            case Cmd.DANH_HIEU:{
                 DanhHieu.process(m, conn.p);
                 break;
             }
-            case -90:{
+            case Cmd.TOP_UP_LIST:{
                 ListTichNap.process(conn.p, m);
                 break;
             }
-            case -86: {
+            case Cmd.WANTED_CHEST: {
                 if (conn.p != null) {
                     Wanted_Chest.process(conn.p, m);
                 }
                 break;
             }
-            case -85: {
+            case Cmd.WANTED: {
                 if (conn.p != null) {
                     Wanted.process(conn.p, m);
                 }
                 break;
             }
-            case -35: {
+            case Cmd.FIGHT: {
                 if (conn.p != null) {
                     Fight.process(conn.p, m);
                 }
                 break;
             }
-            case -80: {
+            case Cmd.PET: {
                 if (conn.p != null) {
                     Pet.process(conn.p, m);
                 }
                 break;
             }
-            case 79: {
+            case Cmd.JOURNEY: {
                 if (conn.p != null) {
                     HanhTrinh.process(conn.p, m);
                 }
                 break;
             }
-            case -94: {
+            case Cmd.UPGRADE_DIAL: {
                 if (conn.p != null) {
                     UpgradeDial.process(conn.p, m);
                 }
                 break;
             }
-            case 81: {
+            case Cmd.UPGRADE_SKIN: {
                 if (conn.p != null) {
                     Upgrade_Skin.process(conn.p, m);
                 }
                 break;
             }
-            case -53: {
+            case Cmd.SHIP: {
                 if (conn.p != null) {
                     Ship.process(conn.p, m);
                 }
                 break;
             }
-            case 74: {
+            case Cmd.SKILL_INFO_REQUEST: {
                 byte type = m.reader().readByte();
                 short id = m.reader().readShort();
                 if (conn.p != null && type == 0) {
                     // System.out.println("request skill: " + id);
                     try {
-                        Message m2 = new Message(74);
+                        Message m2 = new Message(Cmd.SKILL_INFO_REQUEST);
                         m2.writer().writeByte(0);
                         m2.writer().writeShort(id);
                         byte[] data1 = Util
@@ -101,7 +102,7 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 43: {
+            case Cmd.TOGGLE_EQUIP_DISPLAY: {
                 if (conn.p != null) {
                     byte type = m.reader().readByte();
                     byte value = m.reader().readByte();
@@ -131,18 +132,18 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -91: {
+            case Cmd.AUCTION: {
                 if (conn.p != null) { // dau gia
                 }
                 break;
             }
-            case -63: {
+            case Cmd.PVP: {
                 if (conn.p != null) {
                     Pvp.process(conn.p, m);
                 }
                 break;
             }
-            case 68: {
+            case Cmd.REFRESH_APPEARANCE: {
                 if (conn.p != null && conn.p.map != null) {
                     conn.p.tocSuper++;
                     if (conn.p.tocSuper > 2) {
@@ -155,10 +156,10 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -95: {
+            case Cmd.UNUSED_95: {
                 break;
             }
-            case -36: {
+            case Cmd.TELEPORT_TO_PLAYER: {
                 int id = m.reader().readInt();
                 if (conn.p != null) {
                     Player p0 = null;
@@ -211,7 +212,7 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -52: {
+            case Cmd.CLAN: {
                 if (conn.p != null) {
                     byte type = m.reader().readByte();
                     // System.out.println(type);
@@ -223,19 +224,19 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 49: {
+            case Cmd.MAX_LEVEL: {
                 if (conn.p != null) {
                     Max_Level.process(conn.p, m);
                 }
                 break;
             }
-            case 80: { // event
+            case Cmd.EVENT_SPECIAL: { // event
                 if (conn.p != null) {
                     EventSpecial.process(conn.p, m);
                 }
                 break;
             }
-            case -71: { // auto revive
+            case Cmd.AUTO_REVIVE: { // auto revive
                 if (conn.p != null && conn.p.map != null && conn.p.map.map_pvp == null
                         && conn.p.map.map_little_garden == null) {
                     if (conn.p.type_pk == -1 && conn.p.typePirate == -1 && conn.p.pointPk == 0) {
@@ -247,7 +248,7 @@ public class MessageHandler {
                                 Service.use_potion(conn.p, 0, conn.p.body.get_hp_max(true));
                                 Service.use_potion(conn.p, 1, conn.p.body.get_mp_max(true));
                                 //
-                                Message m2 = new Message(-71);
+                                Message m2 = new Message(Cmd.AUTO_REVIVE);
                                 m2.writer().writeByte(1);
                                 m2.writer().writeShort(conn.p.index_map);
                                 m2.writer().writeByte(0);
@@ -266,25 +267,25 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -74: {
+            case Cmd.TABLE_TICK_OPTION: {
                 if (conn.p != null) {
                     TableTickOption.process(conn.p, m);
                 }
                 break;
             }
-            case 44: {
+            case Cmd.MARKET: {
                 if (conn.p != null) {
                     Market.process(conn.p, m);
                 }
                 break;
             }
-            case -23: {
+            case Cmd.QUEST: {
                 if (conn.p != null) {
                     Quest.process(conn.p, m);
                 }
                 break;
             }
-            case -72: {
+            case Cmd.RED_LINE: {
                 if (conn.p != null && conn.p.map != null) {
                     if (conn.p.map.template.id == 64) {
                         Red_Line.process(conn.p, m);
@@ -295,19 +296,19 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 66: {
+            case Cmd.UPGRADE_SUPER_ITEM: {
                 if (conn.p != null) {
                     UpgradeSuperItem.process(conn.p, m);
                 }
                 break;
             }
-            case -30: {
+            case Cmd.RANKING: {
                 if (conn.p != null) {
                     BXH.process(conn.p, m);
                 }
                 break;
             }
-            case -50: {
+            case Cmd.SPLIT_JOIN_ITEM: {
                 if (conn.p != null) {
                     byte type = m.reader().readByte();
                     if (type == 0) {
@@ -318,103 +319,103 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -62: {
+            case Cmd.BOAT_SHOP_UPDATE: {
                 if (conn.p != null) {
                     ItemBoat.update_part_boat_when_shopping(conn.p);
                 }
                 break;
             }
-            case -28: {
+            case Cmd.LEARN_SKILL: {
                 if (conn.p != null) {
                     Learn_Skill.process(conn.p, m);
                 }
                 break;
             }
-            case 45: {
+            case Cmd.UPGRADE_DEVIL: {
                 if (conn.p != null) {
                     UpgradeDevil.process(conn.p, m);
                 }
                 break;
             }
-            case -25: {
+            case Cmd.PARTY: {
                 if (conn.p != null) {
                     Party.process(conn.p, m);
                 }
                 break;
             }
-            case 20: {
+            case Cmd.BUFF: {
                 if (conn.p != null && conn.p.map != null && !conn.p.isdie
                         && conn.p.get_eff(201) == null) {
                     Buff.process(conn.p, m);
                 }
                 break;
             }
-            case -32: {
+            case Cmd.PLAYER_CHEST: {
                 if (conn.p != null) {
                     PlayerChest.process(conn.p, m);
                 }
                 break;
             }
-            case 54: {
+            case Cmd.LUCKY_SPIN: {
                 if (conn.p != null) {
                     VongQuay.process(conn.p, m);
                 }
                 break;
             }
-            case 18: {
+            case Cmd.CHAT: {
                 if (conn.p != null) {
                     Chat.process(conn.p, m, 0);
                 }
                 break;
             }
-            case -29: {
+            case Cmd.FRIEND: {
                 if (conn.p != null) {
                     Friend.process(conn.p, m);
                 }
                 break;
             }
-            case -49: {
+            case Cmd.TRADE: {
                 Trade.process(conn.p, m);
                 break;
             }
-            case -67: {
+            case Cmd.REBUILD_ITEM: {
                 if (conn.p != null) {
                     Rebuild_Item.process(conn.p, m);
                 }
                 break;
             }
-            case -77: {
+            case Cmd.CHUYEN_HOA: {
                 if (conn.p != null) {
                     ChuyenHoa.process(conn.p, m);
                 }
                 break;
             }
-            case -16: {
+            case Cmd.PLUS_STAT_POINT: {
                 if (conn.p != null) {
                     conn.p.plus_point(m);
                 }
                 break;
             }
-            case -13: { // use potion
+            case Cmd.USE_POTION: { // use potion
                 if (conn.p != null) {
                     short id = m.reader().readShort();
                     UseItem.use_item_potion(conn.p, id);
                 }
                 break;
             }
-            case -11: {
+            case Cmd.CLIENT_YES_NO: {
                 if (conn.p != null) {
                     ClientYesNo.process(conn.p, m);
                 }
                 break;
             }
-            case -58: {
+            case Cmd.CLIENT_INPUT: {
                 if (conn.p != null) {
                     ClientInput.process(conn.p, m);
                 }
                 break;
             }
-            case -46: {
+            case Cmd.CHAT_KTG: {
                 if (conn.p != null) {
                     byte type = m.reader().readByte();
                     String text = m.reader().readUTF();
@@ -450,7 +451,7 @@ public class MessageHandler {
                                     Clan.send_money(p0, false);
                                 }
                             }
-                            Message m23 = new Message(-31);
+                            Message m23 = new Message(Cmd.CLAN_CHAT_BROADCAST);
                             m23.writer().writeByte(type);
                             m23.writer().writeUTF(conn.p.clan.name + ": " + text);
                             m23.writer().writeByte(0);
@@ -469,37 +470,37 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -48: {
+            case Cmd.UPGRADE_ITEM: {
                 if (conn.p != null) {
                     UpgradeItem.process(conn.p, m);
                 }
                 break;
             }
-            case -22: {
+            case Cmd.USE_ITEM: {
                 if (conn.p != null) {
                     UseItem.process(conn.p, m);
                 }
                 break;
             }
-            case -105: {
+            case Cmd.ITEM4_INFO_REQUEST: {
                 if (conn.p != null) {
                     Service.request_item4_info(conn.p, m);
                 }
                 break;
             }
-            case -21: {
+            case Cmd.SELL_ITEM: {
                 if (conn.p != null) {
                     Service.sell_item(conn.p, m);
                 }
                 break;
             }
-            case 12: {
+            case Cmd.PICK_ITEM: {
                 if (conn.p != null) {
                     conn.p.map.pick_item(conn.p, m);
                 }
                 break;
             }
-            case -42: {
+            case Cmd.VIEW_OTHER_PLAYER: {
                 if (conn.p != null) {
                     String name = m.reader().readUTF();
                     Player p0 = Map.get_player_by_name_allmap(name);
@@ -509,7 +510,7 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 14: {
+            case Cmd.CHANGE_PK_FLAG: {
                 if (conn.p != null) {
                     byte type = m.reader().readByte();
                     byte act = m.reader().readByte();
@@ -521,32 +522,32 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 6: {
+            case Cmd.REQUEST_LIVE_FROM_DIE: {
                 if (conn.p != null) {
                     conn.p.request_live_from_die(m);
                 }
                 break;
             }
-            case -18: {
+            case Cmd.BUY_ITEM: {
                 if (conn.p != null) {
                     Service.buy_item(conn.p, m);
                 }
                 break;
             }
-            case -5: {
+            case Cmd.REQUEST_CHAR_INFO_IN_MAP: {
                 if (conn.p != null) {
                     short id = m.reader().readShort();
                     conn.p.map.send_char_in4_inmap(conn.p, id);
                 }
                 break;
             }
-            case 46: {
+            case Cmd.CHECK_PLAY_IN_MAP: {
                 if (conn.p != null) {
                     Service.checkPlayInMap(conn.p, m);
                 }
                 break;
             }
-            case 0: {
+            case Cmd.MAP_READY: {
                 if (conn.p != null) {
                     // int id_map_change =
                     m.reader().readShort();
@@ -582,7 +583,7 @@ public class MessageHandler {
                         conn.p.ship_pet.id_map_save = conn.p.map.template.id;
                         conn.p.ship_pet.x = conn.p.x;
                         conn.p.ship_pet.y = conn.p.y;
-                        Message m_local = new Message(1);
+                        Message m_local = new Message(Cmd.MOVE);
                         m_local.writer().writeByte(0);
                         m_local.writer().writeShort(conn.p.ship_pet.index_map);
                         m_local.writer().writeShort(conn.p.ship_pet.x);
@@ -620,7 +621,7 @@ public class MessageHandler {
                         for (int i = 0; i < conn.p.map.map_LienTang.mobs.size(); i++) {
                             Mob mob = conn.p.map.map_LienTang.mobs.get(i);
                             if (!mob.isdie) {
-                                Message m_local = new Message(1);
+                                Message m_local = new Message(Cmd.MOVE);
                                 m_local.writer().writeByte(1);
                                 m_local.writer().writeShort(mob.index);
                                 m_local.writer().writeShort(mob.x);
@@ -647,7 +648,7 @@ public class MessageHandler {
                     Player p0 = conn.p;
                     for (int i12 = 0; i12 < p0.fashion.size(); i12++) {
                         if ((p0.fashion.get(i12).id == 55) && p0.fashion.get(i12).is_use) {
-                            Message m3 = new Message(-47);
+                            Message m3 = new Message(Cmd.FASHION_EFFECT_TOGGLE);
                             m3.writer().writeByte(8);
                             m3.writer().writeByte(4);
                             conn.addmsg(m3);
@@ -656,7 +657,7 @@ public class MessageHandler {
                         }
                     }
                     if(p0.id_danh_hieu != -1){
-                        Message msg = new Message(-102);
+                        Message msg = new Message(Cmd.DANH_HIEU);
                         msg.writer().writeByte(1);
                         msg.writer().writeByte(0);
                         msg.writer().writeInt(p0.id);
@@ -668,7 +669,7 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 23: {
+            case Cmd.AREA_SELECT: {
                 if (conn.p != null && !conn.p.isdie) {
                     if (conn.p.ship_pet != null) {
                         Service.send_box_ThongBao_OK(conn.p,
@@ -679,37 +680,37 @@ public class MessageHandler {
                 }
                 break;
             }
-            case 17: {
+            case Cmd.MAP_CHAT: {
                 if (conn.p != null) {
                     conn.p.map.send_chat(conn.p, m);
                 }
                 break;
             }
-            case -20: {
+            case Cmd.MENU_PROCESS: {
                 if (conn.p != null) {
-                    MenuController.process_menu(conn.p, m);
+                    MenuActions.process_menu(conn.p, m);
                 }
                 break;
             }
-            case -19: {
+            case Cmd.MENU_REQUEST: {
                 if (conn.p != null) {
-                    MenuController.send_menu(conn.p, m);
+                    MenuDisplay.send_menu(conn.p, m);
                 }
                 break;
             }
-            case 2: {
+            case Cmd.USE_SKILL: {
                 if (conn.p != null && conn.p.map != null) {
                     conn.p.map.use_skill(conn.p, m);
                 }
                 break;
             }
-            case -70: {
+            case Cmd.UPDATE_NUM_PLAYER_IN_MAP: {
                 if (conn.p != null) {
                     conn.p.map.update_num_player_in_map(conn.p);
                 }
                 break;
             }
-            case -45: {// update pk point
+            case Cmd.UPDATE_PK_POINT: {// update pk point
                 if (conn.p != null) {
                     conn.p.update_point_pk(0);
                     Service.CountDown_Ticket(conn.p);
@@ -718,63 +719,63 @@ public class MessageHandler {
                 }
                 break;
             }
-            case -33: {
+            case Cmd.RMS_PROCESS: {
                 if (conn.p != null) {
                     Service.rms_process(conn.p, m);
                 }
                 break;
             }
-            case 1: {
+            case Cmd.MOVE: {
                 if (conn.p != null && conn.p.map != null) {
                     conn.p.map.send_move(conn.p, m);
                 }
                 break;
             }
-            case 4: {
+            case Cmd.REQUEST_MOB_INFO: {
                 if (conn.p != null) {
                     Service.request_mob_in4(conn.p, m);
                 }
                 break;
             }
-            case 48: {
+            case Cmd.SEND_OBJ_TEMPLATE: {
                 if (conn.p != null) {
                     Service.send_obj_template(conn.p, m);
                 }
                 break;
             }
-            case -9: {
+            case Cmd.LOGIN: {
                 if (conn.p == null) {
                     login(m);
                 }
                 break;
             }
-            case -8: {
+            case Cmd.CREATE_CHAR: {
                 conn.create_char(m);
                 break;
             }
-            case -51: {
+            case Cmd.SEND_ICON: {
                 Service.send_icon(m, conn);
                 break;
             }
-            case -82: {
+            case Cmd.READ_PART_NEW: {
                 conn.ReadPartNew(m);
                 break;
             }
-            case -38: {
+            case Cmd.SEND_DATA_FROM_SERVER: {
                 conn.send_data_from_server(m);
                 break;
             }
-            case -2: {
+            case Cmd.LOGIN_LEGACY: {
                 if (conn.user == null && conn.pass == null) {
                     conn.login(m);
                 }
                 break;
             }
-            case -6: {
+            case Cmd.CHECK_DATA_VER: {
                 conn.Check_Data_Ver();
                 break;
             }
-            case -7: {
+            case Cmd.REQUEST_DATA_UPDATE: {
                 conn.request_data_update(m);
                 break;
             }
@@ -803,7 +804,7 @@ public class MessageHandler {
                 return;
             }
             conn.p = p0;
-            Message m = new Message(-7); // update clock
+            Message m = new Message(Cmd.REQUEST_DATA_UPDATE); // update clock
             m.writer().writeByte(17);
             m.writer().writeLong(System.currentTimeMillis());
             conn.addmsg(m);

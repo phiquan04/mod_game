@@ -8,7 +8,7 @@ import template.ShopTichLuy;
 
 public class SaveData {
     public static void process() {
-        if (Manager.gI().server_admin) {
+        if (Config.gI().server_admin) {
             return;
         }
         long t = System.currentTimeMillis();
